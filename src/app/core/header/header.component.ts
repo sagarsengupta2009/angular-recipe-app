@@ -1,37 +1,40 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
 import { DataStorageService } from '../../shared/data-storage.service';
 import { AuthenticationService } from '../../authentication/authentication.service';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../../state-index';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html'
+  selector: 'app-header',
+  templateUrl: './header.component.html',
 })
-
 export class HeaderComponent {
-    @Output() featureSelected = new EventEmitter<string>();
-    
-    constructor(private dataStorageService: DataStorageService,
-        public authService: AuthenticationService) {}
+  @Output() featureSelected = new EventEmitter<string>();
 
-    onSelect(feature: string){
-        this .featureSelected.emit(feature);
-    }
+  constructor(
+    private dataStorageService: DataStorageService,
+    public authService: AuthenticationService,
+    private store: Store<fromApp.AppState>
+  ) {}
 
-    onSaveData() {
-        this.dataStorageService.storeRecipes().subscribe(
-            (response: any) => {
-                console.log(response);
-            },
-            (error: any) => {}
-        );
-    }
+  onSelect(feature: string) {
+    this.featureSelected.emit(feature);
+  }
 
-    onFetchData() {
-        this.dataStorageService.getRecipes();
-    }
+  onSaveData() {
+    this.dataStorageService.storeRecipes().subscribe(
+      (response: any) => {
+        console.log(response);
+      },
+      (error: any) => {}
+    );
+  }
 
-    onLogout() {
-        this.authService.logout();
-    }
+  onFetchData() {
+    this.dataStorageService.getRecipes();
+  }
+
+  onLogout() {
+    this.authService.logout();
+  }
 }
