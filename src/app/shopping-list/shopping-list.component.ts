@@ -1,47 +1,26 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import * as ShoppingListActions from './store/shopping-list.actions';
+import * as fromApp from '../../app/state-index';
 import { Ingredient } from '../shared/ingredient.model';
-import { ShoppingListService } from './shopping-list.service';
-import { ShoppingListState } from './store/shopping-list.reducers';
-// import { AppState } from './store/state-index';
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
-  styleUrls: ['./shopping-list.component.scss']
+  styleUrls: ['./shopping-list.component.scss'],
 })
-
-export class ShoppingListComponent implements OnInit, OnDestroy {
-
-  shoppingListState!: Observable<ShoppingListState>;
+export class ShoppingListComponent implements OnInit {
+  shoppingListState!: Observable<{ ingredients: Ingredient[] }>;
   subscription!: Subscription;
 
-  constructor( 
-    private shoppingListService: ShoppingListService,
-    private store: Store<{shoppingList: {ingredients: Ingredient[]}}>) {
-      // this.shoppingListState = store.select('shoppingList');
-   }
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    console.log('init')
-    // this.shoppingListState = this.store.pipe(select('shoppingList'));
     this.shoppingListState = this.store.select('shoppingList');
-    this.shoppingListState.subscribe(item => console.log(item))
-    // this.subscription = this.shoppingListService.ingridientsChanged
-    // .subscribe(
-    //   (ingredients: Ingredient[]) => {
-    //     this.ingredients = ingredients;
-    //   }
-    // );
   }
 
   onEditItem(index: number) {
-    this.shoppingListService.startedEditing.next(index);
-  }
-
-  ngOnDestroy() {
-    // this.subscription.unsubscribe();
+    this.store.dispatch(new ShoppingListActions.StartEdit(index));
   }
 }
-

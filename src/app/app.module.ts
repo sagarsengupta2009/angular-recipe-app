@@ -9,13 +9,10 @@ import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { AuthModule } from './authentication/auth.module';
 import { CoreModule } from './core/core.module';
 import { StoreModule } from '@ngrx/store';
-import { shoppingListReducer } from './shopping-list/store/shopping-list.reducers';
-import { reducers } from './shopping-list/store/state-index';
+import { reducers } from './state-index';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -24,9 +21,9 @@ import { reducers } from './shopping-list/store/state-index';
     ShoppingListModule,
     AuthModule,
     CoreModule,
-    StoreModule.forRoot(reducers)
+    StoreModule.forRoot(reducers),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
